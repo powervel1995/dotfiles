@@ -50,7 +50,7 @@ get_sessions_by_mru() {
 			)
 		else # tmux is not running
 			RESULT=$(
-			 fzf-tmux \
+				 fzf-tmux \
 					--bind "$DIR_BIND" \
 					--border-label "$BORDER_LABEL" \
 					--header " ctrl-d: directory" \
@@ -61,7 +61,7 @@ get_sessions_by_mru() {
 		fi
 	else # in tmux
 		RESULT=$(
-			(get_sessions_by_mru && (sed -e "$HOME_REPLACER")) | fzf-tmux \
+			(get_sessions_by_mru) | fzf-tmux \
         --bind "$SESSION_BIND" \
 				--bind "$DIR_BIND" \
 				--border-label "$BORDER_LABEL" \
