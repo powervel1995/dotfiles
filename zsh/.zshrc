@@ -1,10 +1,5 @@
-
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/home/sakthivel/.zsh/completions:"* ]]; then export FPATH="/home/sakthivel/.zsh/completions:$FPATH"; fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -79,9 +74,15 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting)
+plugins=(zsh-autosuggestions zsh-history-substring-search zsh-syntax-highlighting fzf-tab)
+
+fpath+="${ZSH_CUSTOM:-"$ZSH/custom"}/plugins/zsh-completions/src"
 
 source $ZSH/oh-my-zsh.sh
+
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
 
 # User configuration
 
@@ -115,21 +116,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-
-# Load Angular CLI autocompletion.
-#source <(ng completion script)
-
-# bun completions
-[ -s "/home/sakthivel/.bun/_bun" ] && source "/home/sakthivel/.bun/_bun"
-
 # Bun
 export BUN_INSTALL="/home/sakthivel/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 
 export PATH="/var/www/html/aws_cli:$PATH"
 
@@ -140,16 +129,6 @@ source /etc/profile.d/gradle.sh
 M2_HOME='/opt/apache-maven-3.6.3'
 PATH="$M2_HOME/bin:$PATH"
 export PATH
-
-
-# pnpm
-export PNPM_HOME="/home/sakthivel/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm endexport DISPLAY=localhost:0.0
-export DISPLAY=localhost:0.0
 
 NVIM_PATH="/home/sakthivel/nvim-linux64"
 PATH="$NVIM_PATH/bin:$PATH"
@@ -165,9 +144,6 @@ export PATH=$HOME/local/bin:$PATH
 export LD_LIBRARY_PATH=$HOME/local/lib:$LD_LIBRARY_PATH
 export MANPATH=$HOME/local/share/man:$MANPATH
 
-eval "$(zoxide init zsh)"
-
-
 if [ -f  ~/.user_config ]; then
   source ~/.user_config
 fi
@@ -175,9 +151,4 @@ fi
 if [ -f ~/.user_alias ]; then
   source ~/.user_alias
 fi
-
-# add this to not load windows config in wsl
-# sudo vim /etc/wsl.conf
-# Add this lines.
-# [interop] appendWindowsPath = false
-
+. "/home/sakthivel/.deno/env"
